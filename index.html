@@ -4,8 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0A0E18">
-<title>Kova</title>
+<link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Kova: AI Calorie Coach for iPhone</title>
 <meta name="description" content="Kova is the AI calorie coach that sees your whole day: food from a photo, training and sleep from Apple Health, and a coach whose voice you choose.">
+<link rel="canonical" href="https://downloadkova.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kova">
+<meta property="og:title" content="Kova: the AI calorie coach that sees your whole day">
+<meta property="og:description" content="Food from a photo. Sleep and training from Apple Health. A coach whose voice you choose. Free to start on iPhone.">
+<meta property="og:url" content="https://downloadkova.app/">
+<meta property="og:image" content="https://downloadkova.app/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Kova app: the calorie coach that sees your whole day, with the Coach screen on an iPhone.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kova: the AI calorie coach that sees your whole day">
+<meta name="twitter:description" content="Food from a photo. Sleep and training from Apple Health. A coach whose voice you choose. Free to start on iPhone.">
+<meta name="twitter:image" content="https://downloadkova.app/og.jpg">
+<meta name="apple-itunes-app" content="app-id=6775047464">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Kova: AI Calorie Coach","operatingSystem":"iOS","applicationCategory":"HealthApplication","url":"https://downloadkova.app/","installUrl":"https://apps.apple.com/app/id6775047464","description":"Kova is the AI calorie coach that sees your whole day: food from a photo, training and sleep from Apple Health, and a coach whose voice you choose.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"James Craig"}}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Nunito:wght@400;600;700&display=swap">
 <style>
@@ -761,7 +781,9 @@
   /* first-party analytics for the page: anonymous, insert-only */
   var SB_URL = 'https://ckkusjfkdqfgegsyhkpw.supabase.co', SB_KEY = 'sb_publishable_PN6Qpyv6KMdnFtan7gp5og_JG2PCW93';
   function sbHeaders(){ return { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }; }
-  function logEvent(event, payload){ try { fetch(SB_URL + '/rest/v1/landing_events', { method: 'POST', headers: sbHeaders(), body: JSON.stringify({ event: event, payload: payload || null }), keepalive: true }).catch(function(){}); } catch (e) {} }
+  var SRC = (function(){ try { var q = new URLSearchParams(location.search); var v = q.get('src') || q.get('utm_source') || ''; if (v) sessionStorage.setItem('kova_src', v); return (v || sessionStorage.getItem('kova_src') || document.referrer.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || 'direct').slice(0, 64); } catch (e) { return 'direct'; } })();
+  function logEvent(event, payload){ try { var p = payload || {}; p.src = SRC; fetch(SB_URL + '/rest/v1/landing_events', { method: 'POST', headers: sbHeaders(), body: JSON.stringify({ event: event, payload: p }), keepalive: true }).catch(function(){}); } catch (e) {} }
+  logEvent('visit', { path: location.pathname, w: window.innerWidth });
 
   /* quiz: four questions, always ends in a fit, tailored to the answers */
   var Q = [
@@ -812,7 +834,7 @@
     e.preventDefault(); var email = (input.value || '').trim().toLowerCase();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = "That email doesn't look right. Check it and try again."; input.focus(); return; }
     msg.textContent = "Joining…";
-    fetch(SB_URL + '/rest/v1/waitlist', { method: 'POST', headers: sbHeaders(), body: JSON.stringify({ email: email, list: 'android', source: 'landing' }) })
+    fetch(SB_URL + '/rest/v1/waitlist', { method: 'POST', headers: sbHeaders(), body: JSON.stringify({ email: email, list: 'android', source: SRC }) })
       .then(function(r){
         if (r.status === 201) { msg.textContent = "You're on the list. We'll email you if Android happens."; form.reset(); logEvent('waitlist_join'); }
         else if (r.status === 409) { msg.textContent = "You're already on the list."; }

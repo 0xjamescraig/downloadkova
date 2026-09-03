@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://downloadkova.app/sitemap.xml
